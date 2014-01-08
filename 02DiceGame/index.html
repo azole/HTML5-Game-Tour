@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Dice Game</title>
+    </head>
+    <body>
+      
+      <canvas id="myCanvas" width="400" height="200"
+style="border:1px solid #0000CC;">
+</canvas>
+
+      <script>
+        var ch = Math.ceil(Math.random()*6);
+
+        var c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
+
+        var dicX = 40;
+        var dicY = 40;
+        var dicWidth = 120;
+        var dicHeight = 120;
+        var deltaX = dicWidth / 4;
+        var deltaY = dicHeight / 6;
+        var r = 10;
+
+        //console.log(ch);
+        drawRect();
+        switch(ch) {
+          case 1:
+            draw1();
+            break;
+          case 2:
+            draw2();
+            break;
+          case 3:
+            draw1();
+            draw2();
+            break;
+          case 4:
+            draw4();
+            break;
+          case 5:
+            draw1();
+            draw4();
+            break;
+          case 6:
+            draw4();
+            drawMid();
+            break;
+        }
+ 
+        function drawRect(){
+          ctx.strokeRect(dicX, dicY, dicWidth, dicHeight);
+        }
+
+        function draw1() {
+          ctx.beginPath();
+          ctx.arc(dicX + deltaX * 2, dicY + deltaY * 3, r, 0, 2 * Math.PI);
+          ctx.fillStyle="red";
+          ctx.fill();
+          //ctx.stroke();
+          ctx.closePath();
+        }
+
+        function draw2() {
+          ctx.beginPath();
+          ctx.arc(dicX + deltaX, dicY + deltaY, r, 0, 2*Math.PI);
+          ctx.arc(dicX + deltaX * 3, dicY + deltaY * 5, r, 0, 2*Math.PI);
+          ctx.fillStyle="red";
+          ctx.fill();
+          ctx.closePath();
+        }
+
+        function draw4(){
+          ctx.beginPath();
+          ctx.arc(dicX + deltaX, dicY + deltaY, r, 0, 2*Math.PI);
+          ctx.arc(dicX + deltaX * 3, dicY + deltaY, r, 0, 2*Math.PI);
+          ctx.arc(dicX + deltaX, dicY + deltaY * 5, r, 0, 2*Math.PI);
+          ctx.arc(dicX + deltaX * 3 , dicY + deltaY * 5, r, 0, 2*Math.PI);
+          ctx.fillStyle="red";
+          ctx.fill();
+          ctx.closePath();
+        }
+        
+        function drawMid(){
+          ctx.beginPath();
+          ctx.arc(dicX + deltaX, dicY + deltaY * 3, r, 0, 2*Math.PI);
+          ctx.arc(dicX + deltaX * 3, dicY + deltaY * 3, r, 0, 2*Math.PI);
+          ctx.fillStyle="red";
+          ctx.fill();
+          ctx.closePath();
+        }
+
+      </script>
+    </body>
+</html>
