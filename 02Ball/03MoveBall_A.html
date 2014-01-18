@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>移動彈力球</title>
+      <style>
+        /* 在這裡寫CSS Style */
+        #myCanvas {
+          border:1px solid black;
+        }
+      </style>
+  </head>
+  <body>
+    <!-- 在這邊寫 HTML -->
+    <canvas id="myCanvas" width="400" height="400" >
+    </canvas>
+    <script>
+      // 在這裡寫 js code
+      // 取得 canvas 物件
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+
+      // 外牆的起始點、框線寬度與顏色
+      var startX = 10;
+      var startY = 10;
+      var wallLineWidth = 10;
+      var wallColor = "#AAAAAA";
+
+      var wallWidth = c.width - wallLineWidth*2;
+      var wallHeight = c.height - wallLineWidth*2;
+
+      // 繪製外牆
+      function drawWall() {
+        ctx.strokeStyle = wallColor;
+        ctx.lineWidth = wallLineWidth;
+        ctx.strokeRect(startX, startY, wallWidth, wallHeight);
+      } 
+
+
+      // 彈力球的起始點與半徑
+      var ballX = 100;
+      var ballY = 100;
+      var ballR = 10;
+
+      // 繪製彈力球
+      function drawBall() {
+        ctx.fillStyle = "red";
+        ctx.beginPath();
+        ctx.arc(ballX, ballY, ballR, 0, 2*Math.PI);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      // 彈力球的速度
+      var speedX = 10;
+      var speedY = 20;
+
+      //  移動球
+      function moveBall(){
+        // 把目前的球擦掉
+        ctx.clearRect(ballX-ballR, ballY-ballR, ballR*2, ballR*2);
+        
+        // 加上位移，計算新的位置
+        ballX+= speedX;
+        ballY+= speedY;
+
+        // 根據以上計算出來的位置，重新畫彈力球
+        drawBall();
+
+        // 重新啟動計時器，準備下一次的重繪
+        setTimeout(moveBall, 200);
+      }
+
+      // 呼叫函式進行測試
+      drawWall();
+      drawBall();
+      // 啟動計時器，設定彈力球自動位移  hint: SetTimeout
+      setTimeout(moveBall, 200);
+
+    </script>
+  </body>
+</html>
+

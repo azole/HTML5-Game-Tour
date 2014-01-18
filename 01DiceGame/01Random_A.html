@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>隨機出骰子點數</title>
+      <style>
+        /* 在這裡寫CSS Style */
+      </style>
+  </head>
+  <body>
+    <!-- 在這邊寫 HTML -->
+    <script>
+      // 在這裡寫 js code
+
+      // 參考資料：http://www.w3schools.com/jsref/jsref_obj_math.asp
+
+      // 得到基本的隨機數字：0 ~ 1 但不包含 1 
+      var result = Math.random();
+      console.log(result);
+
+      // 怎麼變成 1 ~ 6 ?
+      result = result * 6;
+      console.log(result);   // 就從 0 ~ 1 變成 0 ~ 6，但不包含 6
+
+      // 但結果都是小數，可是我們要的是整數？
+      // result = Math.ceil(result);
+      // console.log(result);
+      // 或是 
+      result = Math.floor(result) + 1;
+      console.log(result);
+
+      result = Math.floor(Math.Random()) + 1;
+      
+    </script>
+  </body>
+</html>
+

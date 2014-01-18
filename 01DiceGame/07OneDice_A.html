@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title> 1 顆骰子</title>
+    <style>
+      /* 在這裡寫CSS Style */
+      #myCanvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    
+    <canvas id="myCanvas" width="400" height="200">
+    </canvas>
+    <button id="play">play</button>
+
+    <script>
+
+      var playBtn = document.getElementById("play");
+      playBtn.onclick = playDice;
+
+      var cEle = document.getElementById("myCanvas");
+      var ctx = cEle.getContext("2d");
+
+      var dx = 40;
+      var dy = 40;
+      var diceWidth = 120;
+      var diceHeight = 120;
+      var deltaX = diceWidth / 4;
+      var deltaY = diceHeight / 6;
+      var r = 10;
+      var diceColor = "red";
+      var lineWidth = 5;
+
+      function playDice() {
+        var ch = Math.floor(Math.random()*6) + 1;
+        console.log(ch);
+        ctx.clearRect(dx, dy, diceWidth, diceHeight);
+        drawRect();
+        switch(ch) {
+          case 1:
+            draw1();
+            break;
+          case 2:
+            draw2();
+            break;
+          case 3:
+            draw1();
+            draw2();
+            break;
+          case 4:
+            draw4();
+            break;
+          case 5:
+            draw1();
+            draw4();
+            break;
+          case 6:
+            draw4();
+            drawMid();
+            break;
+        }
+        return ch;
+      }
+
+      function drawRect(){
+        ctx.strokeStyle = diceColor;
+        ctx.lineWidth = lineWidth;
+        ctx.strokeRect(dx, dy, diceWidth, diceHeight);
+      }
+
+      function draw1() {
+        ctx.beginPath();
+        ctx.arc(dx + deltaX * 2, dy + deltaY * 3, r, 0, 2 * Math.PI);
+        ctx.fillStyle = diceColor;
+        ctx.fill();
+        //ctx.stroke();
+        ctx.closePath();
+      }
+
+      function draw2() {
+        ctx.beginPath();
+        ctx.arc(dx + deltaX, dy + deltaY, r, 0, 2*Math.PI);
+        ctx.arc(dx + deltaX * 3, dy + deltaY * 5, r, 0, 2*Math.PI);
+        ctx.fillStyle = diceColor;
+        ctx.fill();
+        ctx.closePath();
+      }
+
+      function draw4(){
+        ctx.beginPath();
+        ctx.arc(dx + deltaX, dy + deltaY, r, 0, 2*Math.PI);
+        ctx.arc(dx + deltaX * 3, dy + deltaY, r, 0, 2*Math.PI);
+        ctx.arc(dx + deltaX, dy + deltaY * 5, r, 0, 2*Math.PI);
+        ctx.arc(dx + deltaX * 3 , dy + deltaY * 5, r, 0, 2*Math.PI);
+        ctx.fillStyle = diceColor;
+        ctx.fill();
+        ctx.closePath();
+      }
+      
+      function drawMid(){
+        ctx.beginPath();
+        ctx.arc(dx + deltaX, dy + deltaY * 3, r, 0, 2*Math.PI);
+        ctx.arc(dx + deltaX * 3, dy + deltaY * 3, r, 0, 2*Math.PI);
+        ctx.fillStyle = diceColor;
+        ctx.fill();
+        ctx.closePath();
+      }
+
+    </script>
+  </body>
+</html>

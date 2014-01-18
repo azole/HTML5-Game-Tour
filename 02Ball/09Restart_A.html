@@ -1,0 +1,223 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>重新啟動</title>
+      <style>
+        /* 在這裡寫CSS Style */
+        #myCanvas {
+          border:1px solid black;
+        }
+      </style>
+  </head>
+  <body>
+    <!-- 在這邊寫 HTML -->
+    <canvas id="myCanvas" width="400" height="400" >
+    </canvas>
+    <!-- 增加一個起始按鈕 -->
+    <button id="restartBtn">restart</button>
+    <script>
+      // 在這裡寫 js code
+      // 取得 canvas 物件
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+
+      // 外牆的起始點、框線寬度與顏色
+      var startX = 10;
+      var startY = 10;
+      var wallLineWidth = 10;
+      var wallColor = "#AAAAAA";
+
+      var wallWidth = c.width - wallLineWidth*2;
+      var wallHeight = c.height - wallLineWidth*2;
+      
+      // 為了彈力球的反彈計算牆的邊界
+      var topBound = startY + wallLineWidth/2;
+      var bottomBound = startY + wallHeight - wallLineWidth/2;
+      var leftBound = startX + wallLineWidth/2; 
+      var rightBound = startX + wallWidth - wallLineWidth/2;
+
+      // 繪製外牆
+      function drawWall() {
+        ctx.strokeStyle = wallColor;
+        ctx.lineWidth = wallLineWidth;
+        ctx.strokeRect(startX, startY, wallWidth, wallHeight);
+      } 
+
+      // 彈力球的起始點與半徑
+      var ballX = 100;
+      var ballY = 100;
+      var ballR = 10;
+
+      // 繪製彈力球
+      function drawBall() {
+        ctx.fillStyle = "red";
+        ctx.beginPath();
+        ctx.arc(ballX, ballY, ballR, 0, 2*Math.PI);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      // 彈力球的速度
+      var speedX = 10;
+      var speedY = 20;
+
+      // 把牆的邊界加/減上彈力球的半徑就是球的邊界
+      var ballTopBound = topBound + ballR;
+      var ballBottomBound = bottomBound - ballR;
+      var ballLeftBound = leftBound + ballR;
+      var ballRightBound = rightBound - ballR;
+
+      //  移動球
+      function moveBall(){
+
+        // 用來記錄遊戲是否繼續
+        var gameStart = true;
+
+        // 把目前的球擦掉
+        ctx.clearRect(ballX-ballR, ballY-ballR, ballR*2, ballR*2);
+        
+        // 加上位移，計算新的位置
+        ballX+= speedX;
+        ballY+= speedY;
+
+        // 撞到牆反彈
+        // 檢查是否有撞到左右邊界，有的話要反彈
+        if(ballX <= ballLeftBound) {
+          var dx = ballLeftBound - (ballX - speedX);
+          ballX = ballLeftBound;
+          var dy = Math.round((dx/speedX) * speedY);
+          ballY = ballY - speedY + dy;
+          // 反彈
+          speedX = -speedX; 
+        } else if(ballX >= ballRightBound) {
+          var dx = ballRightBound - (ballX - speedX);
+          ballX = ballRightBound;
+          var dy = Math.round((dx/speedX) * speedY);
+          ballY = ballY - speedY + dy;
+          speedX = -speedX;
+        }
+
+        // 計算是否有撞到上下邊界
+        if(ballY <= ballTopBound) {
+          // 有撞到上邊界，反彈
+          var dy = ballTopBound - (ballY - speedY);
+          ballY = ballTopBound;
+          var dx = Math.round((dy/speedY) * speedX);
+          ballX = ballX - speedX + dx;
+          speedY = -speedY;
+        } else if(ballY >= ballBottomBound) {
+          // 撞到下邊界時，要檢查是不是有撞在木板上，有的話反彈
+          if(ballX>=boardStart && ballX<=(boardStart+boardWidth)) {
+            var dy = ballBottomBound - (ballY - speedY);
+            ballY = ballBottomBound;
+            var dx = Math.round((dy/speedY) * speedX);
+            ballX = ballX - speedX + dx;
+            speedY = -speedY;
+          } else {
+            // 顯示輸掉遊戲的提示文字
+            ctx.fillStyle = "red";
+            ctx.font = "60px impact";
+            ctx.textAlign = "center";
+            ctx.fillText("你輸了！", c.width/2, c.height/2, 200);
+
+            // 如果沒有撞在木板上，就停止遊戲
+            gameStart = false;
+          }
+        }
+
+        // 根據以上計算出來的位置，重新畫彈力球
+        drawBall();
+
+        // 重新啟動計時器，準備下一次的重繪
+        if(gameStart) {
+          setTimeout(moveBall, 200);
+        } 
+      }
+
+      // 畫木板
+      var boardWidth = 60;
+      var boardStart = 0;
+      function drawBoard() {
+        ctx.strokeStyle = "blue";
+        ctx.beginPath();
+        ctx.moveTo(boardStart, c.height - wallLineWidth);
+        ctx.lineTo(boardStart+boardWidth, c.height - wallLineWidth);
+        ctx.closePath();
+        ctx.stroke();
+      }
+      // 計算木板移動的左右界限
+      var boardLeftBound = leftBound;
+      var boardRightBound = rightBound - boardWidth;
+      // 每次木板的位移量
+      var unit = 10;
+      
+      // 偵測鍵盤事件
+      window.onkeydown = function(event){
+        switch(event.keyCode){
+          case 37:  // 向左
+            moveBoard(-unit);
+            break;
+          case 39:  // 向右
+            moveBoard(unit);
+            break;
+        }
+      };
+
+      // 移動木板
+      function moveBoard(unit){
+        // 把原本藍色木板的區塊重繪成灰色
+        ctx.fillStyle = wallColor;
+        ctx.fillRect(boardStart, c.height - wallLineWidth*1.5, boardWidth, wallLineWidth);
+
+        // 計算新的藍色木板的位置，注意左右界限
+        boardStart += unit;
+        if(boardStart < boardLeftBound) {
+          boardStart = boardLeftBound;
+        } else if(boardStart > boardRightBound){
+          boardStart = boardRightBound;
+        }
+        
+        // 根據新的位置重繪木板
+        drawBoard();
+      }
+      
+      /*// 呼叫函式進行測試
+      drawWall();
+      drawBall();
+      // 啟動計時器，設定彈力球自動位移
+      setTimeout(moveBall, 200);
+      drawBoard();*/
+      function init() {
+
+        // 清空畫布，重新開始繪製
+        ctx.clearRect(0, 0, c.width, c.height);
+
+        // 繪製外牆
+        drawWall();
+
+        // 繪製彈力球之前要先重新設定位置
+        ballX = 100;
+        ballY = 100;
+        
+        // 繪製彈力球
+        drawBall();
+        
+        // 繪製木板之前，先重新產生位置
+        boardStart = Math.floor(Math.random()*(wallWidth-wallLineWidth-boardWidth)) + 15;
+        // 繪製木板
+        drawBoard();
+
+        // 啟動計時器，設定彈力球自動位移
+        setTimeout(moveBall, 200);
+      }
+
+      // 掛載 click 事件，按下restart按鈕後，重新開始遊戲
+      document.getElementById("restartBtn").onclick = function(){
+        init();
+      };
+
+    </script>
+  </body>
+</html>
+

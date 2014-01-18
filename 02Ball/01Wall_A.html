@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>繪製外牆</title>
+      <style>
+        /* 在這裡寫CSS Style */
+        #myCanvas {
+          border:1px solid black;
+        }
+      </style>
+  </head>
+  <body>
+    <!-- 在這邊寫 HTML -->
+    <canvas id="myCanvas" width="400" height="400" >
+    </canvas>
+    <script>
+      // 在這裡寫 js code
+      // 取得 canvas 物件
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+
+      // 外牆的起始點、框線寬度與顏色
+      var startX = 10;
+      var startY = 10;
+      var wallLineWidth = 10;
+      var wallColor = "#AAAAAA";
+
+      var wallWidth = c.width - wallLineWidth*2;
+      var wallHeight = c.height - wallLineWidth*2;
+
+      // 繪製外牆
+      function drawWall() {
+        ctx.strokeStyle = wallColor;
+        ctx.lineWidth = wallLineWidth;
+        ctx.strokeRect(startX, startY, wallWidth, wallHeight);
+      } 
+
+      // 呼叫函式進行測試
+      drawWall();
+      
+
+    </script>
+  </body>
+</html>
+

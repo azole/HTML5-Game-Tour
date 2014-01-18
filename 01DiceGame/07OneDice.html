@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>一顆骰子</title>
+      <style>
+        /* 在這裡寫CSS Style */
+        #myCanvas {
+          border: 1px solid black;
+        }
+      </style>
+  </head>
+  <body>
+    <!-- 在這邊寫 HTML -->
+    <canvas id="myCanvas" width="400" height="200">
+    </canvas>
+
+    <!-- TODO 3: 加上按鈕-->
+
+    <script>
+      // 在這裡寫 js code
+
+      var ctx = document.getElementById("myCanvas").getContext("2d");
+      
+      // TODO 2: 改用常數
+      // 骰子外框寬、高爲 120，起點為 (40, 40)，框線粗細為 5，顏色為 red
+      // 圓點半徑為 10，半徑為 10，圓點為 red
+      
+      var dx = 40;  // 方框的 x 起點
+      var dy = 40;    // 方框的 y 起點
+      var diceWidth = 120;  // 方框的寬度
+      var diceHeight = 120; // 方框的高度
+      var deltaX = diceWith/4;  // 圓點的基本 x 軸位移量
+      var deltaY = diceHight/6;  // 圓點的基本 y 軸位移量
+      var r = 10;       // 圓點半徑
+      var diceColor = "red";   // 骰子框線與圓點的顏色
+      var lineWidth = 5;    // 框線粗細為 5
+      
+
+      // TODO 1: Canvas 畫骰子測試
+      drawRect();
+      // TODO 1: 輪流變換函式名稱進行測試
+      //draw1();  
+      // TODO 1: 組合函式，看看是否有成功畫出3, 5, 6
+      draw2();  
+
+      // TODO 4: 結合隨機點數
+
+
+      // TODO 5: 結合按鈕
+      
+
+      // TODO 1: 畫出骰子的方框
+      function drawRect(){
+
+      }
+
+      // TODO 1: 畫出1點
+      function draw1() {
+
+      }
+
+      // TODO 1: 畫出2點
+      function draw2() {
+
+      }
+
+      // TODO 3: 畫出4點
+      function draw4(){
+
+      }
+      
+      // TODO 3: 畫出中間兩點
+      function drawMid(){
+      }
+
+    </script>
+  </body>
+</html>
+

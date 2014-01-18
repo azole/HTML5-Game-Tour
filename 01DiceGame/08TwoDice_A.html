@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Dice Game</title>
+    </head>
+    <body>
+      
+      <canvas id="myCanvas" width="400" height="200" style="border:1px solid #0000CC;">
+      </canvas>
+      <div>
+        <button id="play">play</button>
+        <span>點數和: </span>
+        <span id="diceSum">0</span>
+        <span>上一次的點數和: </span>
+        <span id="lastSum">0</span>
+        <span>遊戲結果: </span>
+        <span id="gameResult">請按play</span>
+    </div>
+      <script>
+
+        var playBtn = document.getElementById("play");
+        playBtn.onclick = playDice;
+
+        var sumSpan = document.getElementById("diceSum");
+        var lastSpan = document.getElementById("lastSum");
+        var resultSpan = document.getElementById("gameResult");
+
+        var first = true;
+        var lastPoints = 0;
+
+        var cEle = document.getElementById("myCanvas");
+        var ctx = cEle.getContext("2d");
+        var diceX = 40;
+        var diceY = 40;
+        var dx, dy;
+        var diceWidth = 120;
+        var diceHeight = 120;
+        var deltaX = diceWidth / 4;
+        var deltaY = diceHeight / 6;
+        var r = 10;
+        var diceColor = "red";
+
+        function playDice(){
+          ctx.clearRect(0, 0, cEle.width, cEle.height);
+          
+          var ch1 = Math.floor(Math.random()*6) + 1;
+          dx = diceX;
+          dy = diceY;
+          drawDice(ch1);
+
+          var ch2 = Math.floor(Math.random()*6) + 1;
+          dx = diceX + diceWidth + 20;
+          drawDice(ch2);
+
+          var sum = ch1 + ch2;
+          sumSpan.innerHTML = sum;
+          if(first == true) {
+            firstJudge(sum);
+          } else {
+            lastSpan.innerHTML = lastPoints;
+            secondJudge(sum);
+          }
+        }
+
+        function firstJudge(sum) {
+          switch(sum) {
+            case 7:
+            case 11:
+              resultSpan.innerHTML = "你贏了！";
+              break;
+            case 2:
+            case 3:
+            case 12:
+              resultSpan.innerHTML = "你輸了！";
+              break;
+            default:
+              first = false;
+              lastPoints = sum;
+              resultSpan.innerHTML = "繼續玩！";
+          }
+        }
+
+        function secondJudge(sum) {
+          switch(sum) {
+            case lastPoints:
+              resultSpan.innerHTML = "你贏了！";
+              break;
+            case 7:
+              resultSpan.innerHTML = "你輸了！";
+              break;
+            default:
+              lastPoints = sum;
+              resultSpan.innerHTML = "繼續玩！";
+          }
+        }
+
+        function drawDice(ch) {
+          drawRect();
+          switch(ch) {
+            case 1:
+              draw1();
+              break;
+            case 2:
+              draw2();
+              break;
+            case 3:
+              draw1();
+              draw2();
+              break;
+            case 4:
+              draw4();
+              break;
+            case 5:
+              draw1();
+              draw4();
+              break;
+            case 6:
+              draw4();
+              drawMid();
+              break;
+          }
+        }
+ 
+        function drawRect(){
+          ctx.strokeStyle = diceColor;
+          ctx.lineWidth = 5;
+          ctx.strokeRect(dx, dy, diceWidth, diceHeight);
+        }
+
+        function draw1() {
+          ctx.beginPath();
+          ctx.arc(dx + deltaX * 2, dy + deltaY * 3, r, 0, 2 * Math.PI);
+          ctx.fillStyle = diceColor;
+          ctx.fill();
+          //ctx.stroke();
+          ctx.closePath();
+        }
+
+        function draw2() {
+          ctx.beginPath();
+          ctx.arc(dx + deltaX, dy + deltaY, r, 0, 2*Math.PI);
+          ctx.arc(dx + deltaX * 3, dy + deltaY * 5, r, 0, 2*Math.PI);
+          ctx.fillStyle = diceColor;
+          ctx.fill();
+          ctx.closePath();
+        }
+
+        function draw4(){
+          ctx.beginPath();
+          ctx.arc(dx + deltaX, dy + deltaY, r, 0, 2*Math.PI);
+          ctx.arc(dx + deltaX * 3, dy + deltaY, r, 0, 2*Math.PI);
+          ctx.arc(dx + deltaX, dy + deltaY * 5, r, 0, 2*Math.PI);
+          ctx.arc(dx + deltaX * 3 , dy + deltaY * 5, r, 0, 2*Math.PI);
+          ctx.fillStyle = diceColor;
+          ctx.fill();
+          ctx.closePath();
+        }
+        
+        function drawMid(){
+          ctx.beginPath();
+          ctx.arc(dx + deltaX, dy + deltaY * 3, r, 0, 2*Math.PI);
+          ctx.arc(dx + deltaX * 3, dy + deltaY * 3, r, 0, 2*Math.PI);
+          ctx.fillStyle = diceColor;
+          ctx.fill();
+          ctx.closePath();
+        }
+
+      </script>
+    </body>
+</html>
